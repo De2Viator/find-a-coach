@@ -1,12 +1,6 @@
+import { Coach } from '@/models/coach'
 import { ActionContext, Store, StoreOptions } from 'vuex'
-import { getCoaches } from '../firebase'
-
-export interface Coach {
-  name: string;
-  id: number;
-  description: string;
-  subject: string;
-}
+import { firebaseGetCoaches } from '../firebase'
 
 export interface CoachesState {
   coaches: Coach[];
@@ -18,16 +12,16 @@ export const coachesModule = {
     coaches: []
   },
   mutations: {
-    getCoaches (state: CoachesState) {
-      return state.coaches
+    getCoaches (state: CoachesState, payload:{[key:string]:Coach[]}) {
+      for (const key in payload) {
+        state.coaches = [...payload[key]]
+      }
     }
   },
   actions: {
-    getCoaches (
-      context: ActionContext<CoachesState, StoreOptions<Store<CoachesState>>>
-    ) {
-      getCoaches()
-      context.commit('getCoaches')
+    async getCoaches (context: ActionContext<CoachesState, StoreOptions<Store<CoachesState>>>) {
+      const coaches = await firebaseGetCoaches() as { [key:string]:Coach[]}
+      context.commit('getCoaches', coaches)
     }
   }
 }

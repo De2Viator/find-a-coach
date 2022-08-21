@@ -1,8 +1,8 @@
-// Import the functions you need from the SDKs you need
-import { initializeApp } from 'firebase/app'
-import { getDatabase, ref, onValue } from 'firebase/database'
+import { FirebaseOptions, initializeApp } from 'firebase/app'
+import { getDatabase, ref, onValue, DatabaseReference } from 'firebase/database'
+import { nanoid } from 'nanoid'
 
-const firebaseConfig = {
+const firebaseConfig: FirebaseOptions = {
   apiKey: 'AIzaSyAqLwf9Dk2MuVQfU-lAhTSRqiiKvMLOwTw',
   authDomain: 'vue-project-13e43.firebaseapp.com',
   databaseURL: 'https://vue-project-13e43-default-rtdb.firebaseio.com',
@@ -13,12 +13,32 @@ const firebaseConfig = {
   measurementId: 'G-7MPWRPW0MH'
 }
 
-const app = initializeApp(firebaseConfig)
+initializeApp(firebaseConfig)
 const database = getDatabase()
-const dbRef = ref(database, '/coaches')
+const dbRef: DatabaseReference = ref(database, '/coaches')
 
-export const getCoaches = () => {
-  onValue(dbRef, (snapshot) => {
-    console.log(snapshot.val())
+export const firebaseGetCoaches = async () => {
+  return new Promise((resolve) => {
+    onValue(dbRef, (snapshot) => {
+      resolve(snapshot.val())
+    })
   })
+  /* push(dbRef, [{
+    name: 'John',
+    profession: 'C++ Developer',
+    description: 'Hello, my name John and i love C++',
+    id:nanoid()
+  },
+  {
+    name: 'Michael',
+    profession: 'C# Developer',
+    description: 'Hello, my name John and i love C#',
+    id:nanoid()
+  },
+  {
+    name: 'Todd',
+    profession: 'C Developer',
+    description: 'Hello, my name John and i love C',
+    id:nanoid()
+  }]) */
 }

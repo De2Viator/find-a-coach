@@ -1,15 +1,5 @@
 <template>
-    <header>
-        <h2>Find a coach</h2>
+    <header class="flex justify-center">
+        <h1 class="text-white">Find a coach</h1>
     </header>
 </template>
-
-<style lang="scss" scoped>
-h2 {
-    color: white;
-}
-header {
-    display: flex;
-    justify-content: center;
-}
-</style>
