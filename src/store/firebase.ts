@@ -1,6 +1,5 @@
 import { FirebaseOptions, initializeApp } from 'firebase/app'
 import { getDatabase, ref, onValue, DatabaseReference } from 'firebase/database'
-import { nanoid } from 'nanoid'
 
 const firebaseConfig: FirebaseOptions = {
   apiKey: 'AIzaSyAqLwf9Dk2MuVQfU-lAhTSRqiiKvMLOwTw',

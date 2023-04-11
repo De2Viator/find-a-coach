@@ -1,24 +1,8 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router'
-import CoachView from '../views/CoachView.vue'
+import TheLayout from '@/components/layout/TheLayout.vue'
 
 const routes: Array<RouteRecordRaw> = [
-  {
-    path: '/',
-    redirect: '/coaches'
-  },
-  {
-    path: '/coaches',
-    name: 'Coaches',
-    component: CoachView
-  },
-  {
-    path: '/requests',
-    name: 'Requests',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */ '../views/RequestsView.vue')
-  }
+  { path: '', component: TheLayout }
 ]
 
 const router = createRouter({

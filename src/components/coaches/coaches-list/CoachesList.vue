@@ -16,6 +16,8 @@ export default {
     CoachItem
   },
   mounted () {
+    // eslint-disable-next-line
+    // @ts-ignore
     this.$store.dispatch('getCoaches')
   }
 }

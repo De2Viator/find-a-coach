@@ -40,7 +40,7 @@
 </style>
 
 <script lang="ts">
-//TODO MAKE DESIGN FOR PRICE
+// TODO MAKE DESIGN FOR PRICE
 import { PropType } from '@vue/runtime-core'
 import { Coach } from '@/models/coach'
 export default {

@@ -1,18 +1,13 @@
 <template>
-<the-navigation>
-<the-header></the-header>
-</the-navigation>
-<router-view />
+  <the-layout></the-layout>
 </template>
 
 <script lang="ts">
-import TheHeader from './components/ui/TheHeader.vue'
-import TheNavigation from './components/ui/TheNavigation.vue'
+import TheLayout from '@/components/layout/TheLayout.vue'
 
 export default {
   components: {
-    TheHeader,
-    TheNavigation
+    TheLayout
   }
 }
 </script>
@@ -36,6 +31,6 @@ export default {
 * {
   margin: 0;
   padding: 0;
-  font-family: Work-Sans;
+  font-family: Work-Sans,serif;
 }
 </style>
