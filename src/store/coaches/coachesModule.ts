@@ -1,27 +1,24 @@
 import { Coach } from '@/models/coach'
-import { ActionContext, Store, StoreOptions } from 'vuex'
-import { firebaseGetCoaches } from '../firebase'
+import { ActionContext, Module, Store, StoreOptions } from 'vuex'
+import { getCoaches } from '@/shared/api/api'
 
 export interface CoachesState {
   coaches: Coach[];
 }
 
-export const coachesModule = {
-  namespace: true,
+export const coachesModule: Module<CoachesState, StoreOptions<Store<CoachesState>>> = {
+  namespaced: true,
   state: {
     coaches: []
   },
   mutations: {
-    getCoaches (state: CoachesState, payload:{[key:string]:Coach[]}) {
-      for (const key in payload) {
-        state.coaches = [...payload[key]]
-      }
+    getCoaches (state: CoachesState, payload: Coach[]) {
+      state.coaches = payload
     }
   },
   actions: {
     async getCoaches (context: ActionContext<CoachesState, StoreOptions<Store<CoachesState>>>) {
-      const coaches = await firebaseGetCoaches() as { [key:string]:Coach[]}
-      context.commit('getCoaches', coaches)
+      context.commit('getCoaches', await getCoaches())
     }
   }
 }

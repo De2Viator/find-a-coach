@@ -1,8 +1,11 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router'
-import TheLayout from '@/components/layout/TheLayout.vue'
+import CoachView from '@/views/CoachView.vue'
 
-const routes: Array<RouteRecordRaw> = [
-  { path: '', component: TheLayout }
+const routes: RouteRecordRaw[] = [
+  {
+    path: '/coaches',
+    component: CoachView
+  }
 ]
 
 const router = createRouter({

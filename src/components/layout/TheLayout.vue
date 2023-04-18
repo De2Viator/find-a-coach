@@ -1,6 +1,12 @@
 <template>
   <the-header></the-header>
   <the-navigation></the-navigation>
+  <main>
+    <section>
+      <router-view></router-view>
+    </section>
+  </main>
+
 </template>
 
 <script>

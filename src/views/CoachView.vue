@@ -5,7 +5,7 @@
 </template>
 
 <script lang="ts">
-import CoachesList from '../components/coaches/coaches-list/CoachesList.vue'
+import CoachesList from '@/components/layout/children/coaches/coaches-list/CoachesList.vue'
 
 export default {
   components: {
