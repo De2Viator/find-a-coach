@@ -26,7 +26,7 @@
 
 <script lang="ts">
 import { Coach } from '@/models/coach'
-import { PropType } from '@vue/runtime-core'
+import { PropType } from 'vue'
 
 export default {
   name: 'CoachesItem',
