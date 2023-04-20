@@ -1,9 +1,14 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router'
+import CoachesView from '@/views/CoachesView.vue'
 import CoachView from '@/views/CoachView.vue'
 
 const routes: RouteRecordRaw[] = [
   {
     path: '/coaches',
+    component: CoachesView
+  },
+  {
+    path: '/coach-details',
     component: CoachView
   }
 ]

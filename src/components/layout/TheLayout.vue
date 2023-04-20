@@ -2,7 +2,7 @@
   <the-header></the-header>
   <the-navigation></the-navigation>
   <main>
-    <section>
+    <section class="container mx-auto">
       <router-view></router-view>
     </section>
   </main>

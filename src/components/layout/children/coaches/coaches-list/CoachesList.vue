@@ -1,6 +1,8 @@
 <template>
-  <CoachesItem :key="coach.id" :coach="coach" v-for="coach of this.$store.state.coachesModule.coaches">
-  </CoachesItem>
+  <ul class="mt-5">
+    <coaches-item :key="coach.id" :coach="coach" v-for="coach of this.$store.state.coachesModule.coaches">
+    </coaches-item>
+  </ul>
 </template>
 
 <script>
