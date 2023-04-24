@@ -8,7 +8,7 @@ const routes: RouteRecordRaw[] = [
     component: CoachesView
   },
   {
-    path: '/coach-details',
+    path: '/coach-details/:id',
     component: CoachView
   }
 ]

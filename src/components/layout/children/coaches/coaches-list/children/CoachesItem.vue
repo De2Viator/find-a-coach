@@ -8,13 +8,15 @@
       </p>
     </div>
     <h3 class="text-center font-bold">Wage: {{coach.wage}}$</h3>
-    <div class="flex justify-center w-full">
-      <button
-        class="py-2 px-4 bg-blue-500 text-white rounded hover:bg-blue-600 active:bg-blue-700 disabled:opacity-50 mt-4 w-11/12 flex items-center justify-center"
-      >
-        View
-      </button>
-    </div>
+    <router-link :to="'/coach-details/'+coach.id">
+      <div class="flex justify-center w-full">
+        <button
+          class="py-2 px-4 bg-blue-500 text-white rounded hover:bg-blue-600 active:bg-blue-700 disabled:opacity-50 mt-4 w-11/12 flex items-center justify-center"
+        >
+          View
+        </button>
+      </div>
+    </router-link>
     <div class="px-6 pt-4 pb-2">
       <span :key="i" v-for="(subject, i) of coach.subjects" class="inline-block bg-gray-200 rounded-full px-3 py-1
       text-sm font-semibold text-gray-700 mr-2 mb-2">{{subject}}</span>
@@ -35,6 +37,9 @@ export default {
       type: Object as PropType<Coach>,
       required: true
     }
+  },
+  mounted () {
+    console.log(2)
   }
 }
 </script>

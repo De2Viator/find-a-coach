@@ -1,5 +1,5 @@
 import { initializeApp } from 'firebase/app'
-import { getFirestore, collection, getDocs } from 'firebase/firestore'
+import { getFirestore, collection, getDocs, getDoc, doc } from 'firebase/firestore'
 import { Coach } from '@/models/coach'
 const firebaseConfig = {
   apiKey: process.env.VUE_APP_FIREBASE_API_KEY,
@@ -14,11 +14,17 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig)
 const db = getFirestore(app)
-export const getCoaches = async () => {
+export const getCoaches = async (): Promise<Coach[]> => {
   const coachesQuery = await getDocs(collection(db, 'coaches'))
   const coaches: Coach[] = []
   coachesQuery.forEach(coach => {
     coaches.push({ ...coach.data(), id: coach.id } as Coach)
   })
   return coaches
+}
+
+export const getCoach = async (id: string):Promise<Coach|NonNullable<unknown>> => {
+  const coachRef = await getDoc(doc(db, 'coaches', id))
+  const coach = coachRef.data() as Omit<Coach, 'id'>|NonNullable<unknown>
+  return coach ? { ...coach, id: coachRef.id } : {}
 }
