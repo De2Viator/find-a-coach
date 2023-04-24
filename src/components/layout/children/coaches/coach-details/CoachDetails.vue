@@ -53,6 +53,7 @@
 <script lang="ts">
 import { Coach } from '@/models/coach'
 import { EMPTY_COACH } from '@/shared/constants'
+import { StoreState } from '@/shared/types/store/store'
 
 interface CoachData {
   coach: Coach|NonNullable<unknown>,
@@ -65,8 +66,8 @@ export default {
     }
   },
   async mounted () {
-    await this.$store.dispatch('coachesModule/getCoach', this.$route.params.id)
-    this.$data.coach = this.$store.state.coachesModule.coachProfile || EMPTY_COACH
+    await (this as StoreState).$store.dispatch('coachesModule/getCoach', this.$route.params.id)
+    this.$data.coach = (this as StoreState).$store.state.coachesModule.coachProfile
   }
 }
 </script>

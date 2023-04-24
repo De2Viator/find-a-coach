@@ -1,6 +1,7 @@
 import { Coach } from '@/models/coach'
 import { ActionContext, Module, Store, StoreOptions } from 'vuex'
 import { getCoach, getCoaches } from '@/shared/api/api'
+import { EMPTY_COACH } from '@/shared/constants'
 
 export interface CoachesState {
   coaches: Coach[];
@@ -11,7 +12,7 @@ export const coachesModule: Module<CoachesState, StoreOptions<Store<CoachesState
   namespaced: true,
   state: {
     coaches: [],
-    coachProfile: null
+    coachProfile: EMPTY_COACH
   },
   mutations: {
     getCoaches (state: CoachesState, payload: Coach[]) {
