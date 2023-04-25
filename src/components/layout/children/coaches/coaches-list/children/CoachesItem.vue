@@ -26,10 +26,10 @@
 
 <script lang="ts">
 import { Coach } from '@/models/coach'
-import { PropType } from 'vue'
+import { defineComponent, PropType } from 'vue'
 import { nanoid } from 'nanoid'
 
-export default {
+export default defineComponent({
   name: 'CoachesItem',
   methods: { nanoid },
   props: {
@@ -41,7 +41,7 @@ export default {
   mounted () {
     console.log(2)
   }
-}
+})
 </script>
 
 <style scoped lang="less">

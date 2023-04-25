@@ -5,7 +5,7 @@ import { EMPTY_COACH } from '@/shared/constants'
 
 export interface CoachesState {
   coaches: Coach[];
-  coachProfile: Coach|null;
+  coachProfile: Coach|NonNullable<unknown>;
 }
 
 export const coachesModule: Module<CoachesState, StoreOptions<Store<CoachesState>>> = {

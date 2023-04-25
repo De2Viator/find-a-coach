@@ -17,7 +17,8 @@
 <script lang="ts">
 import { nanoid } from 'nanoid'
 import { Data } from '@/components/ui/navigation/models/data'
-export default {
+import { defineComponent } from 'vue'
+export default defineComponent({
   name: 'TheNavigation',
   data ():Data {
     return {
@@ -26,5 +27,5 @@ export default {
       ]
     }
   }
-}
+})
 </script>

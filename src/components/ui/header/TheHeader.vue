@@ -4,10 +4,12 @@
   </header>
 </template>
 
-<script>
-export default {
+<script lang="ts">
+import { defineComponent } from 'vue'
+
+export default defineComponent({
   name: 'TheHeader.vue'
-}
+})
 </script>
 
 <style scoped>

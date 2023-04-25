@@ -9,17 +9,18 @@
 
 </template>
 
-<script>
+<script lang="ts">
 import TheHeader from '@/components/ui/header/TheHeader.vue'
 import TheNavigation from '@/components/ui/navigation/TheNavigation.vue'
+import { defineComponent } from 'vue'
 
-export default {
+export default defineComponent({
   name: 'TheLayout',
   components: {
     TheNavigation,
     TheHeader
   }
-}
+})
 </script>
 
 <style scoped>

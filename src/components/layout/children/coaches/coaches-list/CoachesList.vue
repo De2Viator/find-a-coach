@@ -5,16 +5,17 @@
   </ul>
 </template>
 
-<script>
+<script lang="ts">
 import CoachesItem from '@/components/layout/children/coaches/coaches-list/children/CoachesItem.vue'
+import { defineComponent } from 'vue'
 
-export default {
+export default defineComponent({
   name: 'CoachesList',
   components: { CoachesItem },
   mounted () {
     this.$store.dispatch('coachesModule/getCoaches')
   }
-}
+})
 </script>
 
 <style scoped>
