@@ -1,14 +1,10 @@
 import { Coach } from '@/models/coach'
-import { ActionContext, Module, Store, StoreOptions } from 'vuex'
+import { ActionContext, Module } from 'vuex'
 import { getCoach, getCoaches } from '@/shared/api/api'
 import { EMPTY_COACH } from '@/shared/constants'
-
-export interface CoachesState {
-  coaches: Coach[];
-  coachProfile: Coach|NonNullable<unknown>;
-}
-
-export const coachesModule: Module<CoachesState, StoreOptions<Store<CoachesState>>> = {
+import { CoachesState } from '@/store/coaches/types'
+import { StoreState } from '@/store/types'
+export const coachesModule: Module<CoachesState, StoreState> = {
   namespaced: true,
   state: {
     coaches: [],
@@ -26,7 +22,7 @@ export const coachesModule: Module<CoachesState, StoreOptions<Store<CoachesState
     async getCoaches ({ commit }) {
       commit('getCoaches', await getCoaches())
     },
-    async getCoach (context: ActionContext<CoachesState, StoreOptions<Store<CoachesState>>>, id) {
+    async getCoach (context: ActionContext<CoachesState, StoreState>, id) {
       context.commit('setCoach', await getCoach(id))
     }
   }

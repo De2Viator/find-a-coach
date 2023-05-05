@@ -6,10 +6,11 @@
 
 <script lang="ts">
 import CoachesList from '@/components/layout/children/coaches/coaches-list/CoachesList.vue'
+import { defineComponent } from 'vue'
 
-export default {
+export default defineComponent({
   components: {
     CoachesList
   }
-}
+})
 </script>

@@ -1,15 +1,8 @@
-// vuex.d.ts
 import { Store } from 'vuex'
-import { CoachesState } from '@/store/coaches/coachesModule'
+import { RootState } from '@/store/types'
 
 declare module '@vue/runtime-core' {
-  // declare your own store states
-  interface State {
-    coachesModule:CoachesState
-  }
-
-  // provide typings for `this.$store`
   interface ComponentCustomProperties {
-    $store: Store<State>
+    $store: Store<RootState>
   }
 }

@@ -1,6 +1,8 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router'
 import CoachesView from '@/views/CoachesView.vue'
 import CoachView from '@/views/CoachView.vue'
+import ProfileView from '@/views/ProfileView.vue'
+import RequestsView from '@/views/RequestsView.vue'
 
 const routes: RouteRecordRaw[] = [
   {
@@ -10,6 +12,14 @@ const routes: RouteRecordRaw[] = [
   {
     path: '/coach-details/:id',
     component: CoachView
+  },
+  {
+    path: '/profile',
+    component: ProfileView
+  },
+  {
+    path: '/requests',
+    component: RequestsView
   }
 ]
 

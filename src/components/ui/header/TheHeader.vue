@@ -12,8 +12,10 @@ export default defineComponent({
 })
 </script>
 
-<style scoped>
+<style scoped lang="less">
+@font-size:30px;
+
 h1 {
-  font-size: 30px;
+  font-size: @font-size;
 }
 </style>
