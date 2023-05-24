@@ -3,29 +3,49 @@ import CoachesView from '@/views/CoachesView.vue'
 import CoachView from '@/views/CoachView.vue'
 import ProfileView from '@/views/ProfileView.vue'
 import RequestsView from '@/views/RequestsView.vue'
+import RegistrationView from '@/views/RegistrationView.vue'
+import AuthView from '@/views/AuthView.vue'
+import TheLayout from '@/components/layout/TheLayout.vue'
 
 const routes: RouteRecordRaw[] = [
   {
-    path: '/coaches',
-    component: CoachesView
+    path: '/',
+    component: TheLayout,
+    children: [
+      {
+        path: 'coaches',
+        component: CoachesView
+      },
+      {
+        path: 'coach-details/:id',
+        component: CoachView
+      },
+      {
+        path: 'profile',
+        component: ProfileView
+      },
+      {
+        path: 'requests',
+        component: RequestsView
+      }
+    ]
   },
   {
-    path: '/coach-details/:id',
-    component: CoachView
+    path: '/auth',
+    component: AuthView
   },
   {
-    path: '/profile',
-    component: ProfileView
-  },
-  {
-    path: '/requests',
-    component: RequestsView
+    path: '/registration',
+    component: RegistrationView
   }
 ]
 
 const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
   routes
+})
+router.beforeEach((to, from) => {
+  return !!from.path
 })
 
 export default router

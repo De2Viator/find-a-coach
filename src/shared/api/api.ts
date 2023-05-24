@@ -40,3 +40,5 @@ export const getCities = async (country: string) => {
     country
   })
 }
+
+axios.interceptors.response.use((config) => config)

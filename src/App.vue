@@ -1,15 +1,11 @@
 <template>
-  <the-layout></the-layout>
+  <router-view></router-view>
 </template>
 
 <script lang="ts">
-import TheLayout from '@/components/layout/TheLayout.vue'
+import { defineComponent } from 'vue'
 
-export default {
-  components: {
-    TheLayout
-  }
-}
+export default defineComponent({})
 </script>
 
 <style lang="scss">

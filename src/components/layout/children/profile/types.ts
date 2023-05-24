@@ -9,4 +9,5 @@ export interface ProfileFormData {
   avatar: string;
   subjects: string[];
   avatarPreview: string | ArrayBuffer | null;
+  isEdit: boolean;
 }
