@@ -10,4 +10,5 @@ export interface ProfileFormData {
   subjects: string[];
   avatarPreview: string | ArrayBuffer | null;
   isEdit: boolean;
+  isStudent: boolean;
 }

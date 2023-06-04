@@ -12,3 +12,13 @@ export interface Coach {
     country: string;
     experience:string[]
 }
+
+export interface Student {
+  name: string;
+  description: string;
+  id: string;
+  avatar: string;
+  age: number;
+  city: string;
+  country: string;
+}

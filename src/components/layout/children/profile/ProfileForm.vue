@@ -1,178 +1,192 @@
 <template>
-  <div class="relative mb-4 mt-4 flex flex-wrap items-stretch">
+  <form @submit.prevent="submit()">
+    <div class="relative mb-4 mt-4 flex flex-wrap items-stretch">
     <span
       class="flex items-center whitespace-nowrap rounded-l border border-solid border-neutral-300 px-3
       py-[0.25rem] text-center text-base font-normal leading-[1.6] text-neutral-700 dark:border-neutral-600
       dark:text-neutral-200 dark:placeholder:text-neutral-200 w-full md:w-3/12 md:border-r-0 mb-4 md:mb-0"
-      >First and last name</span
+    >First and last name</span
     >
-    <input
-      type="text"
-      v-model="this.$data.firstName"
-      aria-label="First name"
-      class="rounded-0 relative m-0 block w-full min-w-0 flex-auto border border-solid border-neutral-300 bg-transparent
+      <input
+        type="text"
+        v-model.lazy="this.$data.firstName"
+        aria-label="First name"
+        class="rounded-0 relative m-0 block w-full min-w-0 flex-auto border border-solid border-neutral-300 bg-transparent
       bg-clip-padding px-3 py-[0.25rem] text-base font-normal leading-[1.6] text-neutral-700 outline-none
       transition duration-200 ease-in-out focus:z-[3] focus:border-primary focus:text-neutral-700
       focus:shadow-[inset_0_0_0_1px_rgb(59,113,202)] focus:outline-none dark:border-neutral-600
       dark:text-neutral-200 dark:placeholder:text-neutral-200 dark:focus:border-primary sm:w-[1px] mb-4 md:mb-0"
-      placeholder="First name"
-    />
-    <input
-      type="text"
-      v-model="this.$data.lastName"
-      placeholder="Last name"
-      aria-label="Last name"
-      class="relative m-0 -ml-px block w-[1px] min-w-0 flex-auto rounded-r border border-solid border-neutral-300 bg-transparent
+        placeholder="First name"
+      />
+      <input
+        type="text"
+        v-model.lazy="this.$data.lastName"
+        placeholder="Last name"
+        aria-label="Last name"
+        class="relative m-0 -ml-px block w-[1px] min-w-0 flex-auto rounded-r border border-solid border-neutral-300 bg-transparent
       bg-clip-padding px-3 py-[0.25rem] text-base font-normal leading-[1.6] text-neutral-700 outline-none transition duration-200 ease-in-out
       focus:z-[3] focus:border-primary focus:text-neutral-700 focus:shadow-[inset_0_0_0_1px_rgb(59,113,202)] focus:outline-none dark:border-neutral-600
       dark:text-neutral-200 dark:placeholder:text-neutral-200 dark:focus:border-primary"
-    />
-  </div>
-  <div class="flex flex-wrap justify-between w-full mb-4">
-    <div class="w-full mb-4 md:w-5/12 md:mb-0">
-      <select data-te-select-init ref="countrySelect" v-model="this.$data.country">
-        <option
-          v-for="(country,index) in $store.state.geoModule.countries"
-          @click="console.log('click')"
-          :value="country.name"
-          :key="index"
-          :data-te-select-icon="country.flag"
-        >
-          {{ country.name }}
-        </option>
-      </select>
-    </div>
-    <div class="w-full md:w-5/12">
-      <select data-te-select-init ref="citySelect" class="w-6/12" v-model="this.$data.city">
-        <option
-          v-for="(city,index) in this.$store.state.geoModule.cities"
-          :value="city"
-          :key="index"
-        >
-          {{ city }}
-        </option>
-      </select>
-    </div>
-  </div>
-
-  <div class="w-full flex justify-between flex-wrap">
-    <div
-      class="relative mb-3 w-full md:w-2/3"
-      ref="datePicker"
-      data-te-input-wrapper-init
-    >
-      <input
-        type="text"
-        class="peer block min-h-[auto] w-full rounded border-0 bg-transparent px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none dark:text-neutral-200 dark:placeholder:text-neutral-200 dark:peer-focus:text-primary [&:not([data-te-input-placeholder-active])]:placeholder:opacity-0"
-        placeholder="Select a date"
-        id="datePicker"
       />
-      <label
-        for="datePicker"
-        class="pointer-events-none absolute left-3 top-0 mb-0 max-w-[90%] origin-[0_0] truncate pt-[0.37rem] leading-[1.6] text-neutral-500 transition-all duration-200 ease-out peer-focus:-translate-y-[0.9rem] peer-focus:scale-[0.8] peer-focus:text-primary peer-data-[te-input-state-active]:-translate-y-[0.9rem] peer-data-[te-input-state-active]:scale-[0.8] motion-reduce:transition-none dark:text-neutral-200 dark:peer-focus:text-primary"
-        >Select a date</label
-      >
     </div>
-    <div class="relative mb-4 flex flex-wrap items-stretch w-full md:w-1/4">
+    <div class="flex flex-wrap justify-between w-full mb-4">
+      <div class="w-full mb-4 md:w-5/12 md:mb-0">
+        <select data-te-select-init ref="countrySelect">
+          <option
+            v-for="(country,index) in savedCountries"
+            @click="console.log('click')"
+            :value="country.name"
+            :key="index"
+            :data-te-select-icon="country.flag"
+          >
+            {{ country.name }}
+          </option>
+        </select>
+      </div>
+      <div class="w-full md:w-5/12">
+        <select data-te-select-init ref="citySelect" class="w-6/12">
+          <option
+            v-for="(city,index) in this.$store.state.geoModule.cities"
+            :value="city"
+            :key="index"
+          >
+            {{ city }}
+          </option>
+        </select>
+      </div>
+    </div>
+
+    <div class="w-full flex justify-between flex-wrap">
+      <div
+        class="relative mb-3 w-full md:w-2/3"
+        ref="datePicker"
+        data-te-input-wrapper-init
+      >
+        <input
+          type="text"
+          class="peer block min-h-[auto] w-full rounded border-0 bg-transparent px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none dark:text-neutral-200 dark:placeholder:text-neutral-200 dark:peer-focus:text-primary [&:not([data-te-input-placeholder-active])]:placeholder:opacity-0"
+          placeholder="Select a date"
+          id="datePicker"
+        />
+        <label
+          for="datePicker"
+          class="pointer-events-none absolute left-3 top-0 mb-0 max-w-[90%] origin-[0_0] truncate pt-[0.37rem] leading-[1.6] text-neutral-500 transition-all duration-200 ease-out peer-focus:-translate-y-[0.9rem] peer-focus:scale-[0.8] peer-focus:text-primary peer-data-[te-input-state-active]:-translate-y-[0.9rem] peer-data-[te-input-state-active]:scale-[0.8] motion-reduce:transition-none dark:text-neutral-200 dark:peer-focus:text-primary"
+        >Select a date</label
+        >
+      </div>
+      <div class="relative mb-4 flex flex-wrap items-stretch w-full md:w-1/4">
       <span
         class="flex items-center whitespace-nowrap rounded-l border border-r-0 border-solid border-neutral-300 px-3 py-[0.25rem] text-center text-base font-normal leading-[1.6] text-neutral-700 dark:border-neutral-600 dark:text-neutral-200 dark:placeholder:text-neutral-200"
-        >$</span
+      >$</span
       >
-      <input
-        type="number"
-        v-model="this.$data.wage"
-        placeholder="Wage per hour"
-        min="0.01"
-        class="relative m-0 block w-[1px] min-w-0 flex-auto border border-solid border-neutral-300 bg-transparent bg-clip-padding px-3 py-[0.25rem] text-base font-normal leading-[1.6] text-neutral-700 outline-none transition duration-200 ease-in-out focus:z-[3] focus:border-primary focus:text-neutral-700 focus:shadow-[inset_0_0_0_1px_rgb(59,113,202)] focus:outline-none dark:border-neutral-600 dark:text-neutral-200 dark:placeholder:text-neutral-200 dark:focus:border-primary"
-        aria-label="Amount (to the nearest dollar)"
-      />
-      <span
-        class="flex items-center whitespace-nowrap rounded-r border border-l-0 border-solid border-neutral-300 px-3 py-[0.25rem] text-center text-base font-normal leading-[1.6] text-neutral-700 dark:border-neutral-600 dark:text-neutral-200 dark:placeholder:text-neutral-200"
-        >.00</span
-      >
+        <input
+          v-model.lazy="this.$data.wage"
+          type="text"
+          placeholder="Wage per hour"
+          class="relative m-0 block w-[1px] min-w-0 flex-auto border border-solid border-neutral-300 bg-transparent bg-clip-padding px-3 py-[0.25rem] text-base font-normal leading-[1.6] text-neutral-700 outline-none transition duration-200 ease-in-out focus:z-[3] focus:border-primary focus:text-neutral-700 focus:shadow-[inset_0_0_0_1px_rgb(59,113,202)] focus:outline-none dark:border-neutral-600 dark:text-neutral-200 dark:placeholder:text-neutral-200 dark:focus:border-primary"
+          aria-label="Amount (to the nearest dollar)"
+          pattern="[0-9]*\.[0-9]*"
+        />
+      </div>
     </div>
-  </div>
 
-  <div
-    id="subjects"
-    data-te-chips-initial
-    ref="subjects"
-    class="mb-4 min-h-[45px] border-none pb-0 shadow-none outline-none transition-all duration-300 ease-[cubic-bezier(0.25,0.1,0.25,1)] hover:cursor-text"
-  ></div>
+    <div
+      id="subjects"
+      data-te-chips-initial
+      ref="subjects"
+      class="mb-4 min-h-[45px] border-none pb-0 shadow-none outline-none transition-all duration-300 ease-[cubic-bezier(0.25,0.1,0.25,1)] hover:cursor-text"
+    ></div>
 
-  <div
-    id="experience"
-    data-te-chips-initial
-    ref="experience"
-    class="mb-4 min-h-[45px] border-none pb-0 shadow-none outline-none transition-all duration-300 ease-[cubic-bezier(0.25,0.1,0.25,1)] hover:cursor-text"
-  ></div>
+    <div
+      id="experience"
+      data-te-chips-initial
+      ref="experience"
+      class="mb-4 min-h-[45px] border-none pb-0 shadow-none outline-none transition-all duration-300 ease-[cubic-bezier(0.25,0.1,0.25,1)] hover:cursor-text"
+    ></div>
 
-  <div class="relative flex flex-wrap items-stretch mb-4">
+    <div class="col-12">
+      <div>
+        <input type="email" v-model.lazy="this.$data.email" name="email" id="email" class="border border-gray-300
+      text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5
+      dark:bg-gray-700 dark:border-gray-600 dark:text-white
+      dark:focus:ring-blue-500 dark:focus:border-blue-500 mb-5" placeholder="name@company.com" required="">
+      </div>
+      <div>
+        <input type="password" v-model.lazy="this.$data.password" name="password" id="password" placeholder="••••••••••" class="border border-gray-300
+      text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5
+      dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500
+      dark:focus:border-blue-500 mb-5">
+      </div>
+
+    </div>
+    <div class="relative flex flex-wrap items-stretch mb-4">
     <span
       class="flex items-center whitespace-nowrap rounded-l border border-r-0 border-solid border-neutral-300 px-3 py-[0.25rem] text-center text-base font-normal leading-[1.6] text-neutral-700 dark:border-neutral-600 dark:text-neutral-200 dark:placeholder:text-neutral-200"
-      >Short Description</span
+    >Short Description</span
     >
-    <textarea
-      v-model="this.$data.description"
-      rows="4"
-      class="relative resize-none m-0 block w-[1px] min-w-0 flex-auto rounded-r border border-solid border-neutral-300 bg-transparent bg-clip-padding px-3 py-[0.25rem] text-base font-normal leading-[1.6] text-neutral-700 outline-none transition duration-200 ease-in-out focus:z-[3] focus:border-primary focus:text-neutral-700 focus:shadow-[inset_0_0_0_1px_rgb(59,113,202)] focus:outline-none dark:border-neutral-600 dark:text-neutral-200 dark:placeholder:text-neutral-200 dark:focus:border-primary"
-      aria-label="short description"
-    ></textarea>
-  </div>
+      <textarea
+        rows="4"
+        v-model.lazy="this.$data.description"
+        class="relative resize-none m-0 block w-[1px] min-w-0 flex-auto rounded-r border border-solid border-neutral-300 bg-transparent bg-clip-padding px-3 py-[0.25rem] text-base font-normal leading-[1.6] text-neutral-700 outline-none transition duration-200 ease-in-out focus:z-[3] focus:border-primary focus:text-neutral-700 focus:shadow-[inset_0_0_0_1px_rgb(59,113,202)] focus:outline-none dark:border-neutral-600 dark:text-neutral-200 dark:placeholder:text-neutral-200 dark:focus:border-primary"
+        aria-label="short description"
+      ></textarea>
+    </div>
 
-  <div class="relative flex flex-wrap items-stretch mb-4">
+    <div class="relative flex flex-wrap items-stretch mb-4">
     <span
       class="flex items-center whitespace-nowrap rounded-l border border-r-0 border-solid border-neutral-300 px-3 py-[0.25rem] text-center text-base font-normal leading-[1.6] text-neutral-700 dark:border-neutral-600 dark:text-neutral-200 dark:placeholder:text-neutral-200"
-      >Detailed description</span
+    >Detailed description</span
     >
-    <textarea
-      rows="8"
-      v-model="this.$data.details"
-      class="relative resize-none m-0 block w-[1px] min-w-0 flex-auto rounded-r border border-solid border-neutral-300 bg-transparent bg-clip-padding px-3 py-[0.25rem] text-base font-normal leading-[1.6] text-neutral-700 outline-none transition duration-200 ease-in-out focus:z-[3] focus:border-primary focus:text-neutral-700 focus:shadow-[inset_0_0_0_1px_rgb(59,113,202)] focus:outline-none dark:border-neutral-600 dark:text-neutral-200 dark:placeholder:text-neutral-200 dark:focus:border-primary"
-      aria-label="detailed description"
-    >
+      <textarea
+        rows="8"
+        v-model.lazy="this.$data.details"
+        class="relative resize-none m-0 block w-[1px] min-w-0 flex-auto rounded-r border border-solid border-neutral-300 bg-transparent bg-clip-padding px-3 py-[0.25rem] text-base font-normal leading-[1.6] text-neutral-700 outline-none transition duration-200 ease-in-out focus:z-[3] focus:border-primary focus:text-neutral-700 focus:shadow-[inset_0_0_0_1px_rgb(59,113,202)] focus:outline-none dark:border-neutral-600 dark:text-neutral-200 dark:placeholder:text-neutral-200 dark:focus:border-primary"
+        aria-label="detailed description"
+      >
     </textarea>
-  </div>
-
-  <div class="flex justify-center">
-    <div class="mb-[0.125rem] mr-4 inline-block min-h-[1.5rem] pl-[1.5rem]">
-      <input
-        class="relative float-left -ml-[1.5rem] mr-1 mt-0.5 h-5 w-5 appearance-none rounded-full border-2 border-solid border-neutral-300 before:pointer-events-none before:absolute before:h-4 before:w-4 before:scale-0 before:rounded-full before:bg-transparent before:opacity-0 before:shadow-[0px_0px_0px_13px_transparent] before:content-[''] after:absolute after:z-[1] after:block after:h-4 after:w-4 after:rounded-full after:content-[''] checked:border-primary checked:before:opacity-[0.16] checked:after:absolute checked:after:left-1/2 checked:after:top-1/2 checked:after:h-[0.625rem] checked:after:w-[0.625rem] checked:after:rounded-full checked:after:border-primary checked:after:bg-primary checked:after:content-[''] checked:after:[transform:translate(-50%,-50%)] hover:cursor-pointer hover:before:opacity-[0.04] hover:before:shadow-[0px_0px_0px_13px_rgba(0,0,0,0.6)] focus:shadow-none focus:outline-none focus:ring-0 focus:before:scale-100 focus:before:opacity-[0.12] focus:before:shadow-[0px_0px_0px_13px_rgba(0,0,0,0.6)] focus:before:transition-[box-shadow_0.2s,transform_0.2s] checked:focus:border-primary checked:focus:before:scale-100 checked:focus:before:shadow-[0px_0px_0px_13px_#3b71ca] checked:focus:before:transition-[box-shadow_0.2s,transform_0.2s] dark:border-neutral-600 dark:checked:border-primary dark:checked:after:border-primary dark:checked:after:bg-primary dark:focus:before:shadow-[0px_0px_0px_13px_rgba(255,255,255,0.4)] dark:checked:focus:border-primary dark:checked:focus:before:shadow-[0px_0px_0px_13px_#3b71ca]"
-        type="radio"
-        name="inlineRadioOptions"
-        id="inlineRadio1"
-        value="teacher" />
-      <label
-        class="mt-px inline-block pl-[0.15rem] hover:cursor-pointer"
-        for="inlineRadio1"
-      >I'm a teacher</label
-      >
     </div>
 
-    <div class="mb-[0.125rem] mr-4 inline-block min-h-[1.5rem] pl-[1.5rem]">
-      <input
-        class="relative float-left -ml-[1.5rem] mr-1 mt-0.5 h-5 w-5 appearance-none rounded-full border-2 border-solid border-neutral-300 before:pointer-events-none before:absolute before:h-4 before:w-4 before:scale-0 before:rounded-full before:bg-transparent before:opacity-0 before:shadow-[0px_0px_0px_13px_transparent] before:content-[''] after:absolute after:z-[1] after:block after:h-4 after:w-4 after:rounded-full after:content-[''] checked:border-primary checked:before:opacity-[0.16] checked:after:absolute checked:after:left-1/2 checked:after:top-1/2 checked:after:h-[0.625rem] checked:after:w-[0.625rem] checked:after:rounded-full checked:after:border-primary checked:after:bg-primary checked:after:content-[''] checked:after:[transform:translate(-50%,-50%)] hover:cursor-pointer hover:before:opacity-[0.04] hover:before:shadow-[0px_0px_0px_13px_rgba(0,0,0,0.6)] focus:shadow-none focus:outline-none focus:ring-0 focus:before:scale-100 focus:before:opacity-[0.12] focus:before:shadow-[0px_0px_0px_13px_rgba(0,0,0,0.6)] focus:before:transition-[box-shadow_0.2s,transform_0.2s] checked:focus:border-primary checked:focus:before:scale-100 checked:focus:before:shadow-[0px_0px_0px_13px_#3b71ca] checked:focus:before:transition-[box-shadow_0.2s,transform_0.2s] dark:border-neutral-600 dark:checked:border-primary dark:checked:after:border-primary dark:checked:after:bg-primary dark:focus:before:shadow-[0px_0px_0px_13px_rgba(255,255,255,0.4)] dark:checked:focus:border-primary dark:checked:focus:before:shadow-[0px_0px_0px_13px_#3b71ca]"
-        type="radio"
-        name="inlineRadioOptions"
-        id="inlineRadio2"
-        value="student" />
-      <label
-        class="mt-px inline-block pl-[0.15rem] hover:cursor-pointer"
-        for="inlineRadio2"
-      >I'm a student</label
-      >
-    </div>
-  </div>
+    <div class="flex justify-center">
+      <div class="mb-[0.125rem] mr-4 inline-block min-h-[1.5rem] pl-[1.5rem]">
+        <input
+          class="relative float-left -ml-[1.5rem] mr-1 mt-0.5 h-5 w-5 appearance-none rounded-full border-2 border-solid border-neutral-300 before:pointer-events-none before:absolute before:h-4 before:w-4 before:scale-0 before:rounded-full before:bg-transparent before:opacity-0 before:shadow-[0px_0px_0px_13px_transparent] before:content-[''] after:absolute after:z-[1] after:block after:h-4 after:w-4 after:rounded-full after:content-[''] checked:border-primary checked:before:opacity-[0.16] checked:after:absolute checked:after:left-1/2 checked:after:top-1/2 checked:after:h-[0.625rem] checked:after:w-[0.625rem] checked:after:rounded-full checked:after:border-primary checked:after:bg-primary checked:after:content-[''] checked:after:[transform:translate(-50%,-50%)] hover:cursor-pointer hover:before:opacity-[0.04] hover:before:shadow-[0px_0px_0px_13px_rgba(0,0,0,0.6)] focus:shadow-none focus:outline-none focus:ring-0 focus:before:scale-100 focus:before:opacity-[0.12] focus:before:shadow-[0px_0px_0px_13px_rgba(0,0,0,0.6)] focus:before:transition-[box-shadow_0.2s,transform_0.2s] checked:focus:border-primary checked:focus:before:scale-100 checked:focus:before:shadow-[0px_0px_0px_13px_#3b71ca] checked:focus:before:transition-[box-shadow_0.2s,transform_0.2s] dark:border-neutral-600 dark:checked:border-primary dark:checked:after:border-primary dark:checked:after:bg-primary dark:focus:before:shadow-[0px_0px_0px_13px_rgba(255,255,255,0.4)] dark:checked:focus:border-primary dark:checked:focus:before:shadow-[0px_0px_0px_13px_#3b71ca]"
+          type="radio"
+          name="inlineRadioOptions"
+          id="inlineRadio1"
+          @change="changeMode(true)"
+          value="teacher" />
+        <label
+          class="mt-px inline-block pl-[0.15rem] hover:cursor-pointer"
+          for="inlineRadio1"
+        >I'm a teacher</label
+        >
+      </div>
 
-  <div class="mb-3">
-    <label
-      for="formFile"
-      class="mb-2 inline-block text-neutral-700 dark:text-neutral-200"
+      <div class="mb-[0.125rem] mr-4 inline-block min-h-[1.5rem] pl-[1.5rem]">
+        <input
+          class="relative float-left -ml-[1.5rem] mr-1 mt-0.5 h-5 w-5 appearance-none rounded-full border-2 border-solid border-neutral-300 before:pointer-events-none before:absolute before:h-4 before:w-4 before:scale-0 before:rounded-full before:bg-transparent before:opacity-0 before:shadow-[0px_0px_0px_13px_transparent] before:content-[''] after:absolute after:z-[1] after:block after:h-4 after:w-4 after:rounded-full after:content-[''] checked:border-primary checked:before:opacity-[0.16] checked:after:absolute checked:after:left-1/2 checked:after:top-1/2 checked:after:h-[0.625rem] checked:after:w-[0.625rem] checked:after:rounded-full checked:after:border-primary checked:after:bg-primary checked:after:content-[''] checked:after:[transform:translate(-50%,-50%)] hover:cursor-pointer hover:before:opacity-[0.04] hover:before:shadow-[0px_0px_0px_13px_rgba(0,0,0,0.6)] focus:shadow-none focus:outline-none focus:ring-0 focus:before:scale-100 focus:before:opacity-[0.12] focus:before:shadow-[0px_0px_0px_13px_rgba(0,0,0,0.6)] focus:before:transition-[box-shadow_0.2s,transform_0.2s] checked:focus:border-primary checked:focus:before:scale-100 checked:focus:before:shadow-[0px_0px_0px_13px_#3b71ca] checked:focus:before:transition-[box-shadow_0.2s,transform_0.2s] dark:border-neutral-600 dark:checked:border-primary dark:checked:after:border-primary dark:checked:after:bg-primary dark:focus:before:shadow-[0px_0px_0px_13px_rgba(255,255,255,0.4)] dark:checked:focus:border-primary dark:checked:focus:before:shadow-[0px_0px_0px_13px_#3b71ca]"
+          type="radio"
+          name="inlineRadioOptions"
+          id="inlineRadio2"
+          @change="changeMode(false)"
+          value="student" />
+        <label
+          class="mt-px inline-block pl-[0.15rem] hover:cursor-pointer"
+          for="inlineRadio2"
+        >I'm a student</label
+        >
+      </div>
+    </div>
+
+    <div class="mb-3">
+      <label
+        for="formFile"
+        class="mb-2 inline-block text-neutral-700 dark:text-neutral-200"
       >Avatar</label
-    >
-    <input
-      @change="showAvatar($event)"
-      class="relative m-0 block w-full min-w-0 flex-auto rounded border border-solid
+      >
+      <input
+        @change="showAvatar($event)"
+        class="relative m-0 block w-full min-w-0 flex-auto rounded border border-solid
       border-neutral-300 bg-clip-padding px-3 py-[0.32rem] text-base font-normal text-neutral-700
       transition duration-300 ease-in-out file:-mx-3 file:-my-[0.32rem] file:overflow-hidden
       file:rounded-none file:border-0 file:border-solid file:border-inherit file:bg-neutral-100
@@ -181,12 +195,33 @@
       hover:file:bg-neutral-200 focus:border-primary focus:text-neutral-700 focus:shadow-te-primary
       focus:outline-none dark:border-neutral-600 dark:text-neutral-200 dark:file:bg-neutral-700
       dark:file:text-neutral-100 dark:focus:border-primary"
-      type="file"
-      id="formFile"
-    />
-  </div>
+        type="file"
+        id="formFile"
+        accept="image/*"
+      />
+    </div>
 
-  <img v-if="this.$data.avatarPreview" :src="this.$data.avatarPreview" alt="Current profile avatar">
+    <img v-if="this.$data.avatarPreview" :src="this.$data.avatarPreview" alt="Current profile avatar">
+    <div class="flex justify-end">
+      <button
+        type="submit"
+        data-te-ripple-init
+        data-te-ripple-color="light"
+        class="inline-block rounded bg-primary px-6 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal
+       text-white shadow-[0_4px_9px_-4px_#3b71ca] transition duration-150 ease-in-out
+       hover:bg-primary-600 hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)]
+       focus:bg-primary-600 focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)]
+       focus:outline-none focus:ring-0 active:bg-primary-700
+       active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)]
+       dark:shadow-[0_4px_9px_-4px_rgba(59,113,202,0.5)]
+       dark:hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)]
+       dark:focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)]
+       dark:active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)] w-4/12 sm:w-2/12 ">
+        Submit
+      </button>
+    </div>
+  </form>
+
 </template>
 
 <script lang="ts">
@@ -208,7 +243,8 @@ export default defineComponent({
       city: 'Kiev',
       subjects: [],
       avatarPreview: '',
-      isEdit: false
+      isEdit: false,
+      isStudent: true
     }
   },
   methods: {
@@ -222,6 +258,12 @@ export default defineComponent({
     },
     async updateCities (city: string) {
       await this.$store.dispatch('geoModule/getCities', city)
+    },
+    changeMode (mode: boolean) {
+      this.isStudent = mode
+    },
+    submit () {
+      console.log(this.wage)
     }
   },
   async mounted () {
@@ -248,10 +290,17 @@ export default defineComponent({
       selectVisibleOptions: 30,
       selectFilter: true
     })
+    console.log(countrySelector)
     const citySelector = new Select(this.$refs.citySelect, {
       selectFilter: true
     })
     if (this.$route.path === '/auth') this.$data.isEdit = true
+  },
+  computed: {
+    savedCountries () {
+      console.log(this.$store.state.geoModule.cities)
+      return this.$store.state.geoModule.countries
+    }
   }
 })
 </script>
