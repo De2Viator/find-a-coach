@@ -7,8 +7,10 @@ export interface ProfileFormData {
   description: string;
   details: string;
   avatar: string;
-  subjects: string[];
-  avatarPreview: string | ArrayBuffer | null;
+  subjects: any;
+  experience: any;
   isEdit: boolean;
   isStudent: boolean;
+  email: string;
+  password: string;
 }

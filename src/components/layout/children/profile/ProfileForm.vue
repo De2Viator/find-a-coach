@@ -1,5 +1,5 @@
 <template>
-  <form @submit.prevent="submit()">
+  <form class="pb-5" @submit.prevent>
     <div class="relative mb-4 mt-4 flex flex-wrap items-stretch">
     <span
       class="flex items-center whitespace-nowrap rounded-l border border-solid border-neutral-300 px-3
@@ -9,6 +9,7 @@
     >
       <input
         type="text"
+        required
         v-model.lazy="this.$data.firstName"
         aria-label="First name"
         class="rounded-0 relative m-0 block w-full min-w-0 flex-auto border border-solid border-neutral-300 bg-transparent
@@ -23,6 +24,7 @@
         v-model.lazy="this.$data.lastName"
         placeholder="Last name"
         aria-label="Last name"
+        required
         class="relative m-0 -ml-px block w-[1px] min-w-0 flex-auto rounded-r border border-solid border-neutral-300 bg-transparent
       bg-clip-padding px-3 py-[0.25rem] text-base font-normal leading-[1.6] text-neutral-700 outline-none transition duration-200 ease-in-out
       focus:z-[3] focus:border-primary focus:text-neutral-700 focus:shadow-[inset_0_0_0_1px_rgb(59,113,202)] focus:outline-none dark:border-neutral-600
@@ -34,7 +36,6 @@
         <select data-te-select-init ref="countrySelect">
           <option
             v-for="(country,index) in savedCountries"
-            @click="console.log('click')"
             :value="country.name"
             :key="index"
             :data-te-select-icon="country.flag"
@@ -109,10 +110,10 @@
         <input type="email" v-model.lazy="this.$data.email" name="email" id="email" class="border border-gray-300
       text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5
       dark:bg-gray-700 dark:border-gray-600 dark:text-white
-      dark:focus:ring-blue-500 dark:focus:border-blue-500 mb-5" placeholder="name@company.com" required="">
+      dark:focus:ring-blue-500 dark:focus:border-blue-500 mb-5" placeholder="name@company.com" required>
       </div>
       <div>
-        <input type="password" v-model.lazy="this.$data.password" name="password" id="password" placeholder="••••••••••" class="border border-gray-300
+        <input required type="password" v-model.lazy="this.$data.password" name="password" id="password" placeholder="••••••••••" class="border border-gray-300
       text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5
       dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500
       dark:focus:border-blue-500 mb-5">
@@ -127,6 +128,7 @@
       <textarea
         rows="4"
         v-model.lazy="this.$data.description"
+        required
         class="relative resize-none m-0 block w-[1px] min-w-0 flex-auto rounded-r border border-solid border-neutral-300 bg-transparent bg-clip-padding px-3 py-[0.25rem] text-base font-normal leading-[1.6] text-neutral-700 outline-none transition duration-200 ease-in-out focus:z-[3] focus:border-primary focus:text-neutral-700 focus:shadow-[inset_0_0_0_1px_rgb(59,113,202)] focus:outline-none dark:border-neutral-600 dark:text-neutral-200 dark:placeholder:text-neutral-200 dark:focus:border-primary"
         aria-label="short description"
       ></textarea>
@@ -139,11 +141,28 @@
     >
       <textarea
         rows="8"
+        required
         v-model.lazy="this.$data.details"
         class="relative resize-none m-0 block w-[1px] min-w-0 flex-auto rounded-r border border-solid border-neutral-300 bg-transparent bg-clip-padding px-3 py-[0.25rem] text-base font-normal leading-[1.6] text-neutral-700 outline-none transition duration-200 ease-in-out focus:z-[3] focus:border-primary focus:text-neutral-700 focus:shadow-[inset_0_0_0_1px_rgb(59,113,202)] focus:outline-none dark:border-neutral-600 dark:text-neutral-200 dark:placeholder:text-neutral-200 dark:focus:border-primary"
         aria-label="detailed description"
       >
     </textarea>
+    </div>
+
+    <div class="mb-3">
+      <label
+        for="avatar"
+        class="mb-2 inline-block text-neutral-700 dark:text-neutral-200"
+      >Avatar</label
+      >
+      <div class="flex rounded-md shadow-sm">
+        <div class="px-4 inline-flex items-center min-w-fit rounded-l-md border border-r-0 border-gray-200 bg-gray-50 dark:bg-gray-700 dark:border-gray-600">
+          <span class="text-sm text-gray-500 dark:text-gray-400">http://</span>
+        </div>
+        <input v-model.lazy="this.$data.avatar" required type="text" name="avatar" id="avatar" class="py-3 px-4 pr-11 block w-full border-gray-200 shadow-sm rounded-r-md
+        text-sm focus:z-10 focus:border-blue-500 focus:ring-blue-500 dark:bg-slate-900
+        dark:border-gray-700 dark:text-gray-400" placeholder="www.example.com">
+      </div>
     </div>
 
     <div class="flex justify-center">
@@ -177,46 +196,22 @@
         >
       </div>
     </div>
-
-    <div class="mb-3">
-      <label
-        for="formFile"
-        class="mb-2 inline-block text-neutral-700 dark:text-neutral-200"
-      >Avatar</label
-      >
-      <input
-        @change="showAvatar($event)"
-        class="relative m-0 block w-full min-w-0 flex-auto rounded border border-solid
-      border-neutral-300 bg-clip-padding px-3 py-[0.32rem] text-base font-normal text-neutral-700
-      transition duration-300 ease-in-out file:-mx-3 file:-my-[0.32rem] file:overflow-hidden
-      file:rounded-none file:border-0 file:border-solid file:border-inherit file:bg-neutral-100
-      file:px-3 file:py-[0.32rem] file:text-neutral-700 file:transition file:duration-150
-      file:ease-in-out file:[border-inline-end-width:1px] file:[margin-inline-end:0.75rem]
-      hover:file:bg-neutral-200 focus:border-primary focus:text-neutral-700 focus:shadow-te-primary
-      focus:outline-none dark:border-neutral-600 dark:text-neutral-200 dark:file:bg-neutral-700
-      dark:file:text-neutral-100 dark:focus:border-primary"
-        type="file"
-        id="formFile"
-        accept="image/*"
-      />
-    </div>
-
-    <img v-if="this.$data.avatarPreview" :src="this.$data.avatarPreview" alt="Current profile avatar">
     <div class="flex justify-end">
       <button
-        type="submit"
+        type="button"
         data-te-ripple-init
         data-te-ripple-color="light"
+        @click="submit"
         class="inline-block rounded bg-primary px-6 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal
-       text-white shadow-[0_4px_9px_-4px_#3b71ca] transition duration-150 ease-in-out
-       hover:bg-primary-600 hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)]
-       focus:bg-primary-600 focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)]
-       focus:outline-none focus:ring-0 active:bg-primary-700
-       active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)]
-       dark:shadow-[0_4px_9px_-4px_rgba(59,113,202,0.5)]
-       dark:hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)]
-       dark:focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)]
-       dark:active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)] w-4/12 sm:w-2/12 ">
+               text-white shadow-[0_4px_9px_-4px_#3b71ca] transition duration-150 ease-in-out
+               hover:bg-primary-600 hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)]
+               focus:bg-primary-600 focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)]
+               focus:outline-none focus:ring-0 active:bg-primary-700
+               active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)]
+               dark:shadow-[0_4px_9px_-4px_rgba(59,113,202,0.5)]
+               dark:hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)]
+               dark:focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)]
+               dark:active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)] w-4/12 sm:w-2/12">
         Submit
       </button>
     </div>
@@ -241,21 +236,15 @@ export default defineComponent({
       wage: 0,
       country: 'Ukraine',
       city: 'Kiev',
-      subjects: [],
-      avatarPreview: '',
+      subjects: {},
+      experience: {},
       isEdit: false,
-      isStudent: true
+      isStudent: true,
+      email: '',
+      password: ''
     }
   },
   methods: {
-    showAvatar (event: Event) {
-      const file = ((event.target as HTMLInputElement)?.files as FileList)[0]
-      const reader = new FileReader()
-      reader.readAsDataURL(file)
-      reader.onload = () => {
-        (this.$data.avatarPreview as string | ArrayBuffer | null) = reader.result
-      }
-    },
     async updateCities (city: string) {
       await this.$store.dispatch('geoModule/getCities', city)
     },
@@ -263,16 +252,34 @@ export default defineComponent({
       this.isStudent = mode
     },
     submit () {
-      console.log(this.wage)
+      const subjects = (this.subjects.allChips as HTMLElement[]).map(e => e.innerText)
+      const experience = (this.experience.allChips as HTMLElement[]).map(e => e.innerText)
+      if (this.$route.path === '/registration') {
+        this.$store.dispatch('authModule/registration', {
+          avatar: this.avatar,
+          email: this.email,
+          password: this.password,
+          name: this.firstName,
+          surname: this.lastName,
+          wage: this.wage,
+          description: this.description,
+          details: this.details,
+          country: this.country,
+          city: this.city,
+          isStudent: this.isStudent,
+          subjects,
+          experience
+        })
+      }
     }
   },
   async mounted () {
     initTE({ ChipsInput, Datepicker, Input })
-    const subjects = new ChipsInput(this.$refs.subjects, {
+    this.subjects = new ChipsInput(this.$refs.subjects, {
       initialValues: [],
       labelText: 'Subjects'
     })
-    const experience = new ChipsInput(this.$refs.experience, {
+    this.experience = new ChipsInput(this.$refs.experience, {
       initialValues: [],
       labelText: 'Experience'
     })
@@ -290,7 +297,6 @@ export default defineComponent({
       selectVisibleOptions: 30,
       selectFilter: true
     })
-    console.log(countrySelector)
     const citySelector = new Select(this.$refs.citySelect, {
       selectFilter: true
     })
@@ -298,7 +304,6 @@ export default defineComponent({
   },
   computed: {
     savedCountries () {
-      console.log(this.$store.state.geoModule.cities)
       return this.$store.state.geoModule.countries
     }
   }

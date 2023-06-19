@@ -1,4 +1,4 @@
-export interface Coach {
+export interface User {
     name: string;
     subjects: string[];
     details: string;
@@ -10,15 +10,9 @@ export interface Coach {
     students_count: number;
     city: string;
     country: string;
-    experience:string[]
+    experience:string[];
+    email: string;
+    password: string;
 }
 
-export interface Student {
-  name: string;
-  description: string;
-  id: string;
-  avatar: string;
-  age: number;
-  city: string;
-  country: string;
-}
+export type Coach = Omit<User, 'email'|'password'>

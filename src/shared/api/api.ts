@@ -1,9 +1,11 @@
 import { initializeApp } from 'firebase/app'
-import { getFirestore, collection, getDocs, getDoc, doc, setDoc } from 'firebase/firestore'
-import { getAuth, createUserWithEmailAndPassword } from 'firebase/auth'
-import { Coach, Student } from '@/models/coach'
+import { getFirestore, collection, getDocs, getDoc, doc, addDoc, query, where } from 'firebase/firestore'
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'firebase/auth'
+import { Coach, User } from '@/models/coach'
 import axios from 'axios'
 import { CountryResponse } from '@/models/geo'
+import { TOKEN } from '@/shared/constants'
+import router from '@/router'
 const firebaseConfig = {
   apiKey: process.env.VUE_APP_FIREBASE_API_KEY,
   authDomain: process.env.VUE_APP_FIREBASE_AUTH_DOMAIN,
@@ -18,8 +20,16 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig)
 const db = getFirestore(app)
 const auth = getAuth(app)
+
+auth.onAuthStateChanged(user => {
+  if (!user) {
+    localStorage.setItem(TOKEN, '')
+    router.push('/auth')
+  }
+})
 export const getCoaches = async (): Promise<Coach[]> => {
-  const coachesQuery = await getDocs(collection(db, 'users'))
+  const coachesQuery = await getDocs(query(collection(db, 'users'),
+    where('isStudent', '==', false)))
   const coaches: Coach[] = []
   coachesQuery.forEach(coach => {
     coaches.push({ ...coach.data(), id: coach.id } as Coach)
@@ -43,13 +53,18 @@ export const getCities = async (country: string) => {
   })
 }
 
-export const registerUser = async (email: string, password: string, profile: Coach|Student) => {
-  await createUserWithEmailAndPassword(auth, email, password)
-  await setDoc(doc(db, 'users'), profile)
+export const authUser = async (email: string, password: string) => {
+  return await signInWithEmailAndPassword(auth, email, password)
 }
 
-/* export const authUser = () => {
-
-} */
-
-axios.interceptors.response.use((config) => config)
+export const registerUser = async (user: User) => {
+  const addedUser = await createUserWithEmailAndPassword(auth, user.email, user.password)
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
+  delete user.email
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
+  delete user.password
+  await addDoc(collection(db, 'users'), user)
+  return addedUser
+}

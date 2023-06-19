@@ -6,6 +6,7 @@ import RequestsView from '@/views/RequestsView.vue'
 import RegistrationView from '@/views/RegistrationView.vue'
 import AuthView from '@/views/AuthView.vue'
 import TheLayout from '@/components/layout/TheLayout.vue'
+import { TOKEN } from '@/shared/constants'
 
 const routes: RouteRecordRaw[] = [
   {
@@ -46,6 +47,10 @@ const router = createRouter({
 })
 router.beforeEach((to, from) => {
   return !!from.path
+})
+router.beforeEach((to, from, next) => {
+  if (!localStorage.getItem(TOKEN) && to.path === ('/registration' || '/auth')) next()
+  else if (localStorage.getItem(TOKEN) && to.path !== '/registration') next()
 })
 
 export default router

@@ -1,5 +1,5 @@
 <template>
-  <h2 class="text-center" style="font-size: 20px">Registration</h2>
+  <h2 class="text-center pt-3" style="font-size: 25px">Registration</h2>
   <div class="container">
     <ProfileForm />
   </div>

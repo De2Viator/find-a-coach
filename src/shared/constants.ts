@@ -14,3 +14,4 @@ export const EMPTY_COACH:Coach = {
   wage: 0,
   avatar: ''
 }
+export const TOKEN = 'token'
