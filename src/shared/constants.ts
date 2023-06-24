@@ -1,6 +1,6 @@
-import { Coach } from '@/models/coach'
+import { User } from '@/models/coach'
 
-export const EMPTY_COACH:Coach = {
+export const EMPTY_COACH:User = {
   age: 0,
   city: '',
   country: '',
@@ -12,6 +12,8 @@ export const EMPTY_COACH:Coach = {
   students_count: 0,
   subjects: [],
   wage: 0,
-  avatar: ''
+  avatar: '',
+  surname: ''
 }
 export const TOKEN = 'token'
+export const ID = 'id'

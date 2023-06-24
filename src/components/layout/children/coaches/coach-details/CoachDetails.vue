@@ -51,12 +51,12 @@
 </template>
 
 <script lang="ts">
-import { Coach } from '@/models/coach'
+import { User } from '@/models/coach'
 import { EMPTY_COACH } from '@/shared/constants'
 import { defineComponent } from 'vue'
 
 interface CoachData {
-  coach: Coach|NonNullable<unknown>,
+  coach: User|NonNullable<unknown>,
 }
 export default defineComponent({
   name: 'CoachDetails',

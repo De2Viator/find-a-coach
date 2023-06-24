@@ -1,11 +1,12 @@
 import { initializeApp } from 'firebase/app'
 import { getFirestore, collection, getDocs, getDoc, doc, addDoc, query, where } from 'firebase/firestore'
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'firebase/auth'
-import { Coach, User } from '@/models/coach'
+import { User, Profile } from '@/models/coach'
 import axios from 'axios'
 import { CountryResponse } from '@/models/geo'
-import { TOKEN } from '@/shared/constants'
+import { ID, TOKEN } from '@/shared/constants'
 import router from '@/router'
+import { Request, RequestedUser } from '@/components/layout/children/requests/models/types'
 const firebaseConfig = {
   apiKey: process.env.VUE_APP_FIREBASE_API_KEY,
   authDomain: process.env.VUE_APP_FIREBASE_AUTH_DOMAIN,
@@ -27,20 +28,45 @@ auth.onAuthStateChanged(user => {
     router.push('/auth')
   }
 })
-export const getCoaches = async (): Promise<Coach[]> => {
+export const getCoaches = async (): Promise<User[]> => {
   const coachesQuery = await getDocs(query(collection(db, 'users'),
     where('isStudent', '==', false)))
-  const coaches: Coach[] = []
+  const coaches: User[] = []
   coachesQuery.forEach(coach => {
-    coaches.push({ ...coach.data(), id: coach.id } as Coach)
+    coaches.push({ ...coach.data(), id: coach.id } as User)
   })
   return coaches
 }
+export const connectWithCoach = async (coachId: string) => {
+  const userId = localStorage.getItem('id')
+  await addDoc(collection(db, 'requests'), { coachId, userId })
+}
 
-export const getCoach = async (id: string):Promise<Coach|NonNullable<unknown>> => {
-  const coachRef = await getDoc(doc(db, 'users', id))
-  const coach = coachRef.data() as Omit<Coach, 'id'>|NonNullable<unknown>
-  return coach ? { ...coach, id: coachRef.id } : {}
+export const getRequestedUsers = async () => {
+  const userId = localStorage.getItem(ID)
+  const requestsQuery = await getDocs(query(collection(db, 'requests'),
+    where('coachId', '==', userId)))
+  const requests: string[] = []
+  requestsQuery.forEach(request => {
+    const requestData = { ...request.data() } as Request
+    requests.push(requestData.userId)
+  })
+  if (requests.length) {
+    const usersQuery = await getDocs(query(collection(db, 'users'), where('userId', 'in', requests)))
+    const users: RequestedUser[] = []
+    usersQuery.forEach(queriedUser => {
+      const user = { ...queriedUser.data() } as User
+      users.push(new RequestedUser(user.id, user.avatar, user.name, user.surname, user.age, user.details))
+    })
+    return users
+  } else {
+    return []
+  }
+}
+export const getUser = async (id: string):Promise<User|NonNullable<unknown>> => {
+  const userRef = await getDoc(doc(db, 'users', id))
+  const user = userRef.data() as Omit<User, 'id'>|NonNullable<unknown>
+  return user ? { ...user, id: userRef.id } : {}
 }
 
 export const getCountries = async () => {
@@ -54,17 +80,20 @@ export const getCities = async (country: string) => {
 }
 
 export const authUser = async (email: string, password: string) => {
+  const coachesQuery = await getDocs(query(collection(db, 'users'),
+    where('email', '==', email)))
+  coachesQuery.forEach(coach => {
+    localStorage.setItem(ID, coach.id)
+  })
   return await signInWithEmailAndPassword(auth, email, password)
 }
 
-export const registerUser = async (user: User) => {
-  const addedUser = await createUserWithEmailAndPassword(auth, user.email, user.password)
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-ignore
-  delete user.email
+export const registerUser = async (user: Profile) => {
+  const password = user.password
+  await createUserWithEmailAndPassword(auth, user.email, password)
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
   delete user.password
   await addDoc(collection(db, 'users'), user)
-  return addedUser
+  return await authUser(user.email, password)
 }

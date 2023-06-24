@@ -11,6 +11,7 @@ import { TOKEN } from '@/shared/constants'
 const routes: RouteRecordRaw[] = [
   {
     path: '/',
+    redirect: '/coaches',
     component: TheLayout,
     children: [
       {
@@ -49,7 +50,7 @@ router.beforeEach((to, from) => {
   return !!from.path
 })
 router.beforeEach((to, from, next) => {
-  if (!localStorage.getItem(TOKEN) && to.path === ('/registration' || '/auth')) next()
+  if (!localStorage.getItem(TOKEN) && (to.path === '/auth' || to.path === '/registration')) next()
   else if (localStorage.getItem(TOKEN) && to.path !== '/registration') next()
 })
 

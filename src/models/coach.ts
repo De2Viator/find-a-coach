@@ -1,5 +1,6 @@
-export interface User {
+export interface Profile {
     name: string;
+    surname: string;
     subjects: string[];
     details: string;
     description: string;
@@ -15,4 +16,4 @@ export interface User {
     password: string;
 }
 
-export type Coach = Omit<User, 'email'|'password'>
+export type User = Omit<Profile, 'email'|'password'>

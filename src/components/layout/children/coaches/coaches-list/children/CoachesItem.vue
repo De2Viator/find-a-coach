@@ -25,7 +25,7 @@
 </template>
 
 <script lang="ts">
-import { Coach } from '@/models/coach'
+import { User } from '@/models/coach'
 import { defineComponent, PropType } from 'vue'
 import { nanoid } from 'nanoid'
 
@@ -34,7 +34,7 @@ export default defineComponent({
   methods: { nanoid },
   props: {
     coach: {
-      type: Object as PropType<Coach>,
+      type: Object as PropType<User>,
       required: true
     }
   },

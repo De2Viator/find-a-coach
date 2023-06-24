@@ -172,7 +172,7 @@
           type="radio"
           name="inlineRadioOptions"
           id="inlineRadio1"
-          @change="changeMode(true)"
+          @change="changeMode(false)"
           value="teacher" />
         <label
           class="mt-px inline-block pl-[0.15rem] hover:cursor-pointer"
@@ -187,7 +187,7 @@
           type="radio"
           name="inlineRadioOptions"
           id="inlineRadio2"
-          @change="changeMode(false)"
+          @change="changeMode(true)"
           value="student" />
         <label
           class="mt-px inline-block pl-[0.15rem] hover:cursor-pointer"

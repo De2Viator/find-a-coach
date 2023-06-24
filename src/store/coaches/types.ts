@@ -1,6 +1,6 @@
-import { Coach } from '@/models/coach'
+import { User } from '@/models/coach'
 
 export interface CoachesState {
-  coaches: Coach[];
-  coachProfile: Coach|NonNullable<unknown>;
+  coaches: User[];
+  coachProfile: User|NonNullable<unknown>;
 }
