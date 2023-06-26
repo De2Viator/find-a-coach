@@ -1,14 +1,15 @@
 import { User } from '@/models/coach'
 import { ActionContext, Module } from 'vuex'
-import { getUser, getCoaches } from '@/shared/api/api'
-import { EMPTY_COACH } from '@/shared/constants'
+import { getUser, getCoaches, connectWithCoach } from '@/shared/api/api'
+import { EMPTY_USER } from '@/shared/constants'
 import { CoachesState } from '@/store/coaches/types'
 import { StoreState } from '@/store/types'
+import { DateTime } from 'luxon'
 export const coachesModule: Module<CoachesState, StoreState> = {
   namespaced: true,
   state: {
     coaches: [],
-    coachProfile: EMPTY_COACH
+    coachProfile: EMPTY_USER
   },
   mutations: {
     getCoaches (state: CoachesState, payload: User[]) {
@@ -22,8 +23,18 @@ export const coachesModule: Module<CoachesState, StoreState> = {
     async getCoaches ({ commit }) {
       commit('getCoaches', await getCoaches())
     },
-    async getCoach (context: ActionContext<CoachesState, StoreState>, id) {
+    async getCoach (context: ActionContext<CoachesState, StoreState>, id: string) {
       context.commit('setCoach', await getUser(id))
+    },
+    async connectWithCoach (context: ActionContext<CoachesState, StoreState>, id: string) {
+      await connectWithCoach(id)
+    }
+  },
+  getters: {
+    age: state => {
+      const birthDay = DateTime.fromISO((state.coachProfile as User).birthDay)
+      const newDate = DateTime.fromISO(new Date().toISOString())
+      return newDate.diff(birthDay, 'years').years
     }
   }
 }

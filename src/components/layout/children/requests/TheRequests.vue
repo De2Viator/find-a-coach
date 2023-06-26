@@ -4,8 +4,8 @@ import TheRequest from '@/components/layout/children/requests/children/TheReques
 
 export default defineComponent({
   components: { TheRequest },
-  mounted () {
-    this.$store.dispatch('requestsModule/getRequestedUsers')
+  async mounted () {
+    await this.$store.dispatch('requestsModule/getRequestedUsers')
   }
 })
 </script>

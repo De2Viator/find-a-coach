@@ -4,6 +4,7 @@ export interface Request {
 }
 
 export class RequestedUser {
-  constructor (public id: string, public avatar: string, public name: string, public surname: string, public age: number, public details: string) {
+  constructor (public id: string, public avatar: string, public name: string, public surname: string,
+               public birthDay: string, public details: string) {
   }
 }

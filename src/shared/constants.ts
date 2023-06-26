@@ -1,7 +1,7 @@
 import { User } from '@/models/coach'
 
-export const EMPTY_COACH:User = {
-  age: 0,
+export const EMPTY_USER: User = {
+  birthDay: new Date().toISOString(),
   city: '',
   country: '',
   description: '',
@@ -9,7 +9,7 @@ export const EMPTY_COACH:User = {
   experience: [],
   id: '',
   name: '',
-  students_count: 0,
+  studentsCount: 0,
   subjects: [],
   wage: 0,
   avatar: '',

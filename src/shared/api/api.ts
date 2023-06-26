@@ -1,10 +1,10 @@
 import { initializeApp } from 'firebase/app'
-import { getFirestore, collection, getDocs, getDoc, doc, addDoc, query, where } from 'firebase/firestore'
+import { getFirestore, collection, getDocs, getDoc, doc, addDoc, query, where, deleteDoc, runTransaction } from 'firebase/firestore'
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'firebase/auth'
 import { User, Profile } from '@/models/coach'
 import axios from 'axios'
 import { CountryResponse } from '@/models/geo'
-import { ID, TOKEN } from '@/shared/constants'
+import { EMPTY_USER, ID, TOKEN } from '@/shared/constants'
 import router from '@/router'
 import { Request, RequestedUser } from '@/components/layout/children/requests/models/types'
 const firebaseConfig = {
@@ -33,6 +33,7 @@ export const getCoaches = async (): Promise<User[]> => {
     where('isStudent', '==', false)))
   const coaches: User[] = []
   coachesQuery.forEach(coach => {
+    console.log(coach)
     coaches.push({ ...coach.data(), id: coach.id } as User)
   })
   return coaches
@@ -52,21 +53,40 @@ export const getRequestedUsers = async () => {
     requests.push(requestData.userId)
   })
   if (requests.length) {
-    const usersQuery = await getDocs(query(collection(db, 'users'), where('userId', 'in', requests)))
+    const usersQuery = await getDocs(query(collection(db, 'users'), where('__name__', 'in', requests)))
     const users: RequestedUser[] = []
     usersQuery.forEach(queriedUser => {
       const user = { ...queriedUser.data() } as User
-      users.push(new RequestedUser(user.id, user.avatar, user.name, user.surname, user.age, user.details))
+      users.push(new RequestedUser(queriedUser.id, user.avatar, user.name, user.surname, user.birthDay, user.details))
     })
     return users
   } else {
     return []
   }
 }
-export const getUser = async (id: string):Promise<User|NonNullable<unknown>> => {
+
+export const deleteRequestedUser = async (userId: string) => {
+  const coachId = localStorage.getItem(ID)
+  const request = await getDocs(query(collection(db, 'requests'),
+    where('coachId', '==', coachId), where('userId', '==', userId)))
+  request.forEach(request => {
+    deleteDoc(doc(db, 'requests', request.id))
+  })
+  return userId
+}
+export const incrementStudentsCount = async () => {
+  const id = localStorage.getItem(ID)
+  const docRef = doc(db, 'users', id as string)
+  return await runTransaction(db, (transaction) => {
+    return transaction.get(docRef).then((docSnapshot) => {
+      if (docSnapshot.exists()) transaction.update(docRef, { studentsCount: docSnapshot.data().studentsCount + 1 })
+    })
+  })
+}
+export const getUser = async (id: string):Promise<User> => {
   const userRef = await getDoc(doc(db, 'users', id))
-  const user = userRef.data() as Omit<User, 'id'>|NonNullable<unknown>
-  return user ? { ...user, id: userRef.id } : {}
+  const user = userRef.data() as Omit<User, 'id'>
+  return user ? { ...user, id: userRef.id } : EMPTY_USER
 }
 
 export const getCountries = async () => {

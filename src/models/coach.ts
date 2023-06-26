@@ -7,8 +7,8 @@ export interface Profile {
     wage: number;
     id: string;
     avatar: string;
-    age: number;
-    students_count: number;
+    birthDay: string;
+    studentsCount: number;
     city: string;
     country: string;
     experience:string[];

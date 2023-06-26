@@ -9,6 +9,7 @@ export interface ProfileFormData {
   avatar: string;
   subjects: any;
   experience: any;
+  birthDaySelector: any;
   isEdit: boolean;
   isStudent: boolean;
   email: string;

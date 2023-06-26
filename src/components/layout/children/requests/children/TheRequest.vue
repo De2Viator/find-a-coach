@@ -1,6 +1,7 @@
 <script lang="ts">
 import { defineComponent, PropType } from 'vue'
 import { RequestedUser } from '@/components/layout/children/requests/models/types'
+import { DateTime } from 'luxon'
 
 export default defineComponent({
   props: {
@@ -15,7 +16,17 @@ export default defineComponent({
       return this.requestedUser.details
     },
     userInfo () {
-      return `${this.requestedUser.name} ${this.requestedUser.surname}, ${this.requestedUser.age}`
+      const newDate = DateTime.fromISO(new Date().toISOString())
+      const birthDate = DateTime.fromISO(this.requestedUser.birthDay)
+      return `${this.requestedUser.name} ${this.requestedUser.surname}, ${newDate.diff(birthDate, 'years').years}`
+    }
+  },
+  methods: {
+    deleteRequestedStudent () {
+      this.$store.dispatch('requestsModule/deleteRequestedUser', this.requestedUser.id)
+    },
+    takeStudent () {
+      this.$store.dispatch('requestsModule/takeStudent', this.requestedUser.id)
     }
   }
 })
@@ -37,8 +48,8 @@ export default defineComponent({
           </div>
         </div>
         <div class="buttons">
-          <button data-modal-hide="staticModal" type="button" class="text-white mr-6 bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Accept</button>
-          <button data-modal-hide="staticModal" type="button" class="text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600">Decline</button>
+          <button @click="takeStudent" data-modal-hide="staticModal" type="button" class="text-white mr-6 bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Accept</button>
+          <button @click="deleteRequestedStudent" data-modal-hide="staticModal" type="button" class="text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600">Decline</button>
         </div>
       </div>
     </div>

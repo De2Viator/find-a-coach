@@ -241,7 +241,8 @@ export default defineComponent({
       isEdit: false,
       isStudent: true,
       email: '',
-      password: ''
+      password: '',
+      birthDaySelector: {}
     }
   },
   methods: {
@@ -254,6 +255,7 @@ export default defineComponent({
     submit () {
       const subjects = (this.subjects.allChips as HTMLElement[]).map(e => e.innerText)
       const experience = (this.experience.allChips as HTMLElement[]).map(e => e.innerText)
+      console.log()
       if (this.$route.path === '/registration') {
         this.$store.dispatch('authModule/registration', {
           avatar: this.avatar,
@@ -267,6 +269,8 @@ export default defineComponent({
           country: this.country,
           city: this.city,
           isStudent: this.isStudent,
+          studentsCount: 0,
+          birthDay: new Date(this.birthDaySelector._selectedDate).toISOString(),
           subjects,
           experience
         })
@@ -283,7 +287,7 @@ export default defineComponent({
       initialValues: [],
       labelText: 'Experience'
     })
-    const datePicker = new Datepicker(this.$refs.datePicker, {
+    this.birthDaySelector = new Datepicker(this.$refs.datePicker, {
       disableFuture: true
     })
     await this.$store.dispatch('geoModule/getCountries')
