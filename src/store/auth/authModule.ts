@@ -2,7 +2,7 @@ import { StoreState } from '@/store/types'
 import { ActionContext, Module } from 'vuex'
 import { Auth, AuthState } from '@/store/auth/types'
 import { authUser, registerUser } from '@/shared/api/api'
-import { Profile } from '@/models/coach'
+import { Profile } from '@/models/user'
 import { TOKEN } from '@/shared/constants'
 import router from '@/router'
 

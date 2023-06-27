@@ -25,7 +25,7 @@
 </template>
 
 <script lang="ts">
-import { User } from '@/models/coach'
+import { User } from '@/models/user'
 import { defineComponent, PropType } from 'vue'
 import { nanoid } from 'nanoid'
 

@@ -52,7 +52,7 @@
 </template>
 
 <script lang="ts">
-import { User } from '@/models/coach'
+import { User } from '@/models/user'
 import { EMPTY_USER } from '@/shared/constants'
 import { defineComponent } from 'vue'
 

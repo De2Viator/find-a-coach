@@ -1,4 +1,4 @@
-import { User } from '@/models/coach'
+import { User } from '@/models/user'
 
 export const EMPTY_USER: User = {
   birthDay: new Date().toISOString(),

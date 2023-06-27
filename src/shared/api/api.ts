@@ -1,7 +1,7 @@
 import { initializeApp } from 'firebase/app'
-import { getFirestore, collection, getDocs, getDoc, doc, addDoc, query, where, deleteDoc, runTransaction } from 'firebase/firestore'
+import { getFirestore, collection, getDocs, getDoc, doc, addDoc, query, where, deleteDoc, runTransaction, updateDoc } from 'firebase/firestore'
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'firebase/auth'
-import { User, Profile } from '@/models/coach'
+import { User, Profile } from '@/models/user'
 import axios from 'axios'
 import { CountryResponse } from '@/models/geo'
 import { EMPTY_USER, ID, TOKEN } from '@/shared/constants'
@@ -87,6 +87,13 @@ export const getUser = async (id: string):Promise<User> => {
   const userRef = await getDoc(doc(db, 'users', id))
   const user = userRef.data() as Omit<User, 'id'>
   return user ? { ...user, id: userRef.id } : EMPTY_USER
+}
+
+export const changeUser = async (profile: Omit<User, 'id' | 'studentsCount'>) => {
+  const id = localStorage.getItem(ID)
+  const docRef = doc(db, 'users', id as string)
+
+  await updateDoc(docRef, profile)
 }
 
 export const getCountries = async () => {

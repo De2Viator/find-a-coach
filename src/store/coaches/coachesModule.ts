@@ -1,4 +1,4 @@
-import { User } from '@/models/coach'
+import { User } from '@/models/user'
 import { ActionContext, Module } from 'vuex'
 import { getUser, getCoaches, connectWithCoach } from '@/shared/api/api'
 import { EMPTY_USER } from '@/shared/constants'

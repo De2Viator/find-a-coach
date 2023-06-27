@@ -38,6 +38,7 @@
             v-for="(country,index) in savedCountries"
             :value="country.name"
             :key="index"
+            :selected="this.$data.country === country.name"
             :data-te-select-icon="country.flag"
           >
             {{ country.name }}
@@ -50,6 +51,7 @@
             v-for="(city,index) in this.$store.state.geoModule.cities"
             :value="city"
             :key="index"
+            :selected="this.$data.city === city"
           >
             {{ city }}
           </option>
@@ -105,7 +107,7 @@
       class="mb-4 min-h-[45px] border-none pb-0 shadow-none outline-none transition-all duration-300 ease-[cubic-bezier(0.25,0.1,0.25,1)] hover:cursor-text"
     ></div>
 
-    <div class="col-12">
+    <div class="col-12" v-if="!this.$data.isEdit">
       <div>
         <input type="email" v-model.lazy="this.$data.email" name="email" id="email" class="border border-gray-300
       text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5
@@ -165,7 +167,7 @@
       </div>
     </div>
 
-    <div class="flex justify-center">
+    <div class="flex justify-center" v-if="!this.$data.isEdit">
       <div class="mb-[0.125rem] mr-4 inline-block min-h-[1.5rem] pl-[1.5rem]">
         <input
           class="relative float-left -ml-[1.5rem] mr-1 mt-0.5 h-5 w-5 appearance-none rounded-full border-2 border-solid border-neutral-300 before:pointer-events-none before:absolute before:h-4 before:w-4 before:scale-0 before:rounded-full before:bg-transparent before:opacity-0 before:shadow-[0px_0px_0px_13px_transparent] before:content-[''] after:absolute after:z-[1] after:block after:h-4 after:w-4 after:rounded-full after:content-[''] checked:border-primary checked:before:opacity-[0.16] checked:after:absolute checked:after:left-1/2 checked:after:top-1/2 checked:after:h-[0.625rem] checked:after:w-[0.625rem] checked:after:rounded-full checked:after:border-primary checked:after:bg-primary checked:after:content-[''] checked:after:[transform:translate(-50%,-50%)] hover:cursor-pointer hover:before:opacity-[0.04] hover:before:shadow-[0px_0px_0px_13px_rgba(0,0,0,0.6)] focus:shadow-none focus:outline-none focus:ring-0 focus:before:scale-100 focus:before:opacity-[0.12] focus:before:shadow-[0px_0px_0px_13px_rgba(0,0,0,0.6)] focus:before:transition-[box-shadow_0.2s,transform_0.2s] checked:focus:border-primary checked:focus:before:scale-100 checked:focus:before:shadow-[0px_0px_0px_13px_#3b71ca] checked:focus:before:transition-[box-shadow_0.2s,transform_0.2s] dark:border-neutral-600 dark:checked:border-primary dark:checked:after:border-primary dark:checked:after:bg-primary dark:focus:before:shadow-[0px_0px_0px_13px_rgba(255,255,255,0.4)] dark:checked:focus:border-primary dark:checked:focus:before:shadow-[0px_0px_0px_13px_#3b71ca]"
@@ -255,7 +257,7 @@ export default defineComponent({
     submit () {
       const subjects = (this.subjects.allChips as HTMLElement[]).map(e => e.innerText)
       const experience = (this.experience.allChips as HTMLElement[]).map(e => e.innerText)
-      console.log()
+      const birthDay = new Date(this.birthDaySelector._selectedDate).toISOString()
       if (this.$route.path === '/registration') {
         this.$store.dispatch('authModule/registration', {
           avatar: this.avatar,
@@ -270,29 +272,69 @@ export default defineComponent({
           city: this.city,
           isStudent: this.isStudent,
           studentsCount: 0,
-          birthDay: new Date(this.birthDaySelector._selectedDate).toISOString(),
+          birthDay,
           subjects,
           experience
         })
+      } else {
+        if (!birthDay || !subjects.length) return
+        const user = {
+          birthDay,
+          subjects,
+          experience,
+          description: this.description,
+          details: this.details,
+          avatar: this.avatar,
+          name: this.firstName,
+          surname: this.lastName,
+          isStudent: this.isStudent,
+          city: this.city,
+          country: this.country,
+          wage: this.wage
+        }
+        this.$store.state.userModule.user = user
+        this.$store.dispatch('userModule/updateUser')
       }
     }
   },
   async mounted () {
     initTE({ ChipsInput, Datepicker, Input })
+    let subjectValues:{tag: string}[] = []
+    let experienceValues:{tag: string}[] = []
+    let startDate = new Date().toISOString()
+    if (this.$route.path !== '/registration') {
+      this.$data.isEdit = true
+      await this.$store.dispatch('userModule/getUser')
+      this.avatar = this.$store.state.userModule.user.avatar
+      this.firstName = this.$store.state.userModule.user.name
+      this.lastName = this.$store.state.userModule.user.surname
+      this.details = this.$store.state.userModule.user.details
+      this.description = this.$store.state.userModule.user.description
+      this.wage = this.$store.state.userModule.user.wage
+      this.country = this.$store.state.userModule.user.country
+      this.city = this.$store.state.userModule.user.city
+      subjectValues = this.$store.state.userModule.user.subjects.map(el => {
+        return { tag: el }
+      })
+      experienceValues = this.$store.state.userModule.user.experience.map(el => {
+        return { tag: el }
+      })
+      startDate = new Date(this.$store.state.userModule.user.birthDay).toISOString()
+    }
+    this.birthDaySelector = new Datepicker(this.$refs.datePicker, {
+      disableFuture: true,
+      startDate
+    })
     this.subjects = new ChipsInput(this.$refs.subjects, {
-      initialValues: [],
+      initialValues: subjectValues,
       labelText: 'Subjects'
     })
     this.experience = new ChipsInput(this.$refs.experience, {
-      initialValues: [],
+      initialValues: experienceValues,
       labelText: 'Experience'
-    })
-    this.birthDaySelector = new Datepicker(this.$refs.datePicker, {
-      disableFuture: true
     })
     await this.$store.dispatch('geoModule/getCountries')
     await this.updateCities(this.$data.country)
-
     const countrySelectEl = this.$refs.countrySelect;
     (countrySelectEl as HTMLSelectElement).addEventListener('optionSelect.te.select', (e) => {
       this.updateCities((e as unknown as {value: string}).value)
@@ -304,7 +346,6 @@ export default defineComponent({
     const citySelector = new Select(this.$refs.citySelect, {
       selectFilter: true
     })
-    if (this.$route.path === '/auth') this.$data.isEdit = true
   },
   computed: {
     savedCountries () {
