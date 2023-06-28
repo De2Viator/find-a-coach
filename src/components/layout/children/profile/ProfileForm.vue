@@ -33,12 +33,11 @@
     </div>
     <div class="flex flex-wrap justify-between w-full mb-4">
       <div class="w-full mb-4 md:w-5/12 md:mb-0">
-        <select data-te-select-init ref="countrySelect">
+        <select data-te-select-init ref="countrySelect" v-model="this.$data.country">
           <option
             v-for="(country,index) in savedCountries"
             :value="country.name"
             :key="index"
-            :selected="this.$data.country === country.name"
             :data-te-select-icon="country.flag"
           >
             {{ country.name }}
@@ -46,12 +45,11 @@
         </select>
       </div>
       <div class="w-full md:w-5/12">
-        <select data-te-select-init ref="citySelect" class="w-6/12">
+        <select data-te-select-init ref="citySelect" class="w-6/12" v-model="this.$data.city">
           <option
             v-for="(city,index) in this.$store.state.geoModule.cities"
             :value="city"
             :key="index"
-            :selected="this.$data.city === city"
           >
             {{ city }}
           </option>
@@ -257,7 +255,8 @@ export default defineComponent({
     submit () {
       const subjects = (this.subjects.allChips as HTMLElement[]).map(e => e.innerText)
       const experience = (this.experience.allChips as HTMLElement[]).map(e => e.innerText)
-      const birthDay = new Date(this.birthDaySelector._selectedDate).toISOString()
+      const birthDay = new Date(this.birthDaySelector._selectedDate || this.birthDaySelector._activeDate).toISOString()
+      if (!subjects.length || !experience.length) return
       if (this.$route.path === '/registration') {
         this.$store.dispatch('authModule/registration', {
           avatar: this.avatar,
@@ -277,7 +276,7 @@ export default defineComponent({
           experience
         })
       } else {
-        if (!birthDay || !subjects.length) return
+        if (!birthDay) return
         const user = {
           birthDay,
           subjects,
@@ -292,6 +291,7 @@ export default defineComponent({
           country: this.country,
           wage: this.wage
         }
+        console.log(user)
         this.$store.state.userModule.user = user
         this.$store.dispatch('userModule/updateUser')
       }

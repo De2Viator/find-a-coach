@@ -4,7 +4,7 @@ import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } f
 import { User, Profile } from '@/models/user'
 import axios from 'axios'
 import { CountryResponse } from '@/models/geo'
-import { EMPTY_USER, ID, TOKEN } from '@/shared/constants'
+import { EMPTY_USER, ID, IS_STUDENT, TOKEN } from '@/shared/constants'
 import router from '@/router'
 import { Request, RequestedUser } from '@/components/layout/children/requests/models/types'
 const firebaseConfig = {
@@ -30,7 +30,7 @@ auth.onAuthStateChanged(user => {
 })
 export const getCoaches = async (): Promise<User[]> => {
   const coachesQuery = await getDocs(query(collection(db, 'users'),
-    where('isStudent', '==', false)))
+    where('isStudent', '==', false), where('__name__', '!=', localStorage.getItem(ID))))
   const coaches: User[] = []
   coachesQuery.forEach(coach => {
     console.log(coach)
@@ -111,6 +111,8 @@ export const authUser = async (email: string, password: string) => {
     where('email', '==', email)))
   coachesQuery.forEach(coach => {
     localStorage.setItem(ID, coach.id)
+    const data = { ...coach.data() }
+    localStorage.setItem(IS_STUDENT, `${data.isStudent}`)
   })
   return await signInWithEmailAndPassword(auth, email, password)
 }
@@ -122,5 +124,6 @@ export const registerUser = async (user: Profile) => {
   // @ts-ignore
   delete user.password
   await addDoc(collection(db, 'users'), user)
+  localStorage.setItem(IS_STUDENT, `${user.isStudent}`)
   return await authUser(user.email, password)
 }

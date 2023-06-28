@@ -17,6 +17,7 @@
 <script lang="ts">
 import { Data } from '@/components/ui/navigation/models/data'
 import { defineComponent } from 'vue'
+import { IS_STUDENT } from '@/shared/constants'
 export default defineComponent({
   name: 'TheNavigation',
   data ():Data {
@@ -25,6 +26,11 @@ export default defineComponent({
         { name: 'Requests', link: '/requests' },
         { name: 'Profile', link: '/profile' }
       ]
+    }
+  },
+  mounted () {
+    if (JSON.parse(localStorage.getItem(IS_STUDENT) as string)) {
+      this.links.splice(1, 1)
     }
   }
 })

@@ -7,6 +7,7 @@ export interface Profile {
     wage: number;
     id: string;
     avatar: string;
+    isStudent: boolean;
     birthDay: string;
     studentsCount: number;
     city: string;
