@@ -1,20 +1,11 @@
 <template>
-<the-navigation>
-<the-header></the-header>
-</the-navigation>
-<router-view />
+  <router-view></router-view>
 </template>
 
 <script lang="ts">
-import TheHeader from './components/ui/TheHeader.vue'
-import TheNavigation from './components/ui/TheNavigation.vue'
+import { defineComponent } from 'vue'
 
-export default {
-  components: {
-    TheHeader,
-    TheNavigation
-  }
-}
+export default defineComponent({})
 </script>
 
 <style lang="scss">
@@ -36,6 +27,6 @@ export default {
 * {
   margin: 0;
   padding: 0;
-  font-family: Work-Sans;
+  font-family: Work-Sans,serif;
 }
 </style>

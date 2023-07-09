@@ -1,29 +1,57 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router'
-import CoachView from '../views/CoachView.vue'
+import CoachesView from '@/views/CoachesView.vue'
+import CoachView from '@/views/CoachView.vue'
+import ProfileView from '@/views/ProfileView.vue'
+import RequestsView from '@/views/RequestsView.vue'
+import RegistrationView from '@/views/RegistrationView.vue'
+import AuthView from '@/views/AuthView.vue'
+import TheLayout from '@/components/layout/TheLayout.vue'
+import { TOKEN } from '@/shared/constants'
 
-const routes: Array<RouteRecordRaw> = [
+const routes: RouteRecordRaw[] = [
   {
     path: '/',
-    redirect: '/coaches'
+    redirect: '/coaches',
+    component: TheLayout,
+    children: [
+      {
+        path: 'coaches',
+        component: CoachesView
+      },
+      {
+        path: 'coach-details/:id',
+        component: CoachView
+      },
+      {
+        path: 'profile',
+        component: ProfileView
+      },
+      {
+        path: 'requests',
+        component: RequestsView
+      }
+    ]
   },
   {
-    path: '/coaches',
-    name: 'Coaches',
-    component: CoachView
+    path: '/auth',
+    component: AuthView
   },
   {
-    path: '/requests',
-    name: 'Requests',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */ '../views/RequestsView.vue')
+    path: '/registration',
+    component: RegistrationView
   }
 ]
 
 const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
   routes
+})
+router.beforeEach((to, from) => {
+  return !!from.path
+})
+router.beforeEach((to, from, next) => {
+  if (!localStorage.getItem(TOKEN) && (to.path === '/auth' || to.path === '/registration')) next()
+  else if (localStorage.getItem(TOKEN) && to.path !== '/registration') next()
 })
 
 export default router

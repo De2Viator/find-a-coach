@@ -1,15 +1,17 @@
 <template>
-    <section>
-        <coaches-list></coaches-list>
-    </section>
+  <CoachDetails></CoachDetails>
 </template>
 
 <script lang="ts">
-import CoachesList from '../components/coaches/coaches-list/CoachesList.vue'
+import CoachDetails from '@/components/layout/children/coaches/coach-details/CoachDetails.vue'
+import { defineComponent } from 'vue'
 
-export default {
-  components: {
-    CoachesList
-  }
-}
+export default defineComponent({
+  name: 'CoachView',
+  components: { CoachDetails }
+})
 </script>
+
+<style scoped>
+
+</style>
