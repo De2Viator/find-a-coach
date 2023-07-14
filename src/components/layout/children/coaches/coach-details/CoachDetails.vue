@@ -11,7 +11,7 @@
 
         <div class="relative">
           <img class="w-48 h-48 bg-indigo-100 mx-auto rounded-full shadow-2xl absolute inset-x-0 top-0 -mt-24 flex
-          items-center justify-center text-indigo-500" :src="this.$data.coach.avatar" :alt="this.$data.coach.name">
+          items-center justify-center text-indigo-500 object-cover" :src="this.$data.coach.avatar" :alt="this.$data.coach.name">
         </div>
 
         <div class="space-x-8 flex justify-center mt-32 md:mt-0 md:justify-center">

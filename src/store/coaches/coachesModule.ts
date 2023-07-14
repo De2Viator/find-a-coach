@@ -4,7 +4,7 @@ import { getUser, getCoaches, connectWithCoach } from '@/shared/api/api'
 import { EMPTY_USER } from '@/shared/constants'
 import { CoachesState } from '@/store/coaches/types'
 import { StoreState } from '@/store/types'
-import { DateTime } from 'luxon'
+import { calculateAge } from '@/shared/helpers/age'
 export const coachesModule: Module<CoachesState, StoreState> = {
   namespaced: true,
   state: {
@@ -31,10 +31,6 @@ export const coachesModule: Module<CoachesState, StoreState> = {
     }
   },
   getters: {
-    age: state => {
-      const birthDay = DateTime.fromISO((state.coachProfile as User).birthDay)
-      const newDate = DateTime.fromISO(new Date().toISOString())
-      return newDate.diff(birthDay, 'years').years
-    }
+    age: state => calculateAge((state.coachProfile as User).birthDay)
   }
 }

@@ -1,7 +1,7 @@
 <script lang="ts">
 import { defineComponent, PropType } from 'vue'
 import { RequestedUser } from '@/components/layout/children/requests/models/types'
-import { DateTime } from 'luxon'
+import { calculateAge } from '@/shared/helpers/age'
 
 export default defineComponent({
   props: {
@@ -16,9 +16,7 @@ export default defineComponent({
       return this.requestedUser.details
     },
     userInfo () {
-      const newDate = DateTime.fromISO(new Date().toISOString())
-      const birthDate = DateTime.fromISO(this.requestedUser.birthDay)
-      return `${this.requestedUser.name} ${this.requestedUser.surname}, ${newDate.diff(birthDate, 'years').years}`
+      return `${this.requestedUser.name} ${this.requestedUser.surname}, ${calculateAge(this.requestedUser.birthDay)}`
     }
   },
   methods: {
@@ -40,7 +38,7 @@ export default defineComponent({
       <div class="user">
         <div class="info">
           <div class="avatar-wrp">
-            <img class="avatar" src="https://cdn.pixabay.com/photo/2015/04/23/22/00/tree-736885_1280.jpg" :alt="userInfo">
+            <img class="avatar" :src="requestedUser.avatar" :alt="userInfo">
             <p class="text-center">{{userInfo}}</p>
           </div>
           <div class="description">
